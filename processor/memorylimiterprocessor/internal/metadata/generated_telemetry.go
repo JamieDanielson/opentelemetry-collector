@@ -28,14 +28,14 @@ func Tracer(settings component.TelemetrySettings) trace.Tracer {
 // TelemetryBuilder provides an interface for components to report telemetry
 // as defined in metadata and user config.
 type TelemetryBuilder struct {
-	meter                         metric.Meter
-	ProcessorAcceptedLogRecords   metric.Int64Counter
-	ProcessorAcceptedMetricPoints metric.Int64Counter
-	ProcessorAcceptedSpans        metric.Int64Counter
-	ProcessorRefusedLogRecords    metric.Int64Counter
-	ProcessorRefusedMetricPoints  metric.Int64Counter
-	ProcessorRefusedSpans         metric.Int64Counter
-	meters                        map[configtelemetry.Level]metric.Meter
+	meter                                      metric.Meter
+	ProcessorMemoryLimiterAcceptedLogRecords   metric.Int64Counter
+	ProcessorMemoryLimiterAcceptedMetricPoints metric.Int64Counter
+	ProcessorMemoryLimiterAcceptedSpans        metric.Int64Counter
+	ProcessorMemoryLimiterRefusedLogRecords    metric.Int64Counter
+	ProcessorMemoryLimiterRefusedMetricPoints  metric.Int64Counter
+	ProcessorMemoryLimiterRefusedSpans         metric.Int64Counter
+	meters                                     map[configtelemetry.Level]metric.Meter
 }
 
 // TelemetryBuilderOption applies changes to default builder.
@@ -58,38 +58,38 @@ func NewTelemetryBuilder(settings component.TelemetrySettings, options ...Teleme
 	}
 	builder.meters[configtelemetry.LevelBasic] = LeveledMeter(settings, configtelemetry.LevelBasic)
 	var err, errs error
-	builder.ProcessorAcceptedLogRecords, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
-		"otelcol_processor_accepted_log_records",
+	builder.ProcessorMemoryLimiterAcceptedLogRecords, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
+		"otelcol_processor_memory_limiter_accepted_log_records",
 		metric.WithDescription("Number of log records successfully pushed into the next component in the pipeline. [deprecated since v0.110.0]"),
 		metric.WithUnit("{records}"),
 	)
 	errs = errors.Join(errs, err)
-	builder.ProcessorAcceptedMetricPoints, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
-		"otelcol_processor_accepted_metric_points",
+	builder.ProcessorMemoryLimiterAcceptedMetricPoints, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
+		"otelcol_processor_memory_limiter_accepted_metric_points",
 		metric.WithDescription("Number of metric points successfully pushed into the next component in the pipeline. [deprecated since v0.110.0]"),
 		metric.WithUnit("{datapoints}"),
 	)
 	errs = errors.Join(errs, err)
-	builder.ProcessorAcceptedSpans, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
-		"otelcol_processor_accepted_spans",
+	builder.ProcessorMemoryLimiterAcceptedSpans, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
+		"otelcol_processor_memory_limiter_accepted_spans",
 		metric.WithDescription("Number of spans successfully pushed into the next component in the pipeline. [deprecated since v0.110.0]"),
 		metric.WithUnit("{spans}"),
 	)
 	errs = errors.Join(errs, err)
-	builder.ProcessorRefusedLogRecords, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
-		"otelcol_processor_refused_log_records",
+	builder.ProcessorMemoryLimiterRefusedLogRecords, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
+		"otelcol_processor_memory_limiter_refused_log_records",
 		metric.WithDescription("Number of log records that were rejected by the next component in the pipeline. [deprecated since v0.110.0]"),
 		metric.WithUnit("{records}"),
 	)
 	errs = errors.Join(errs, err)
-	builder.ProcessorRefusedMetricPoints, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
-		"otelcol_processor_refused_metric_points",
+	builder.ProcessorMemoryLimiterRefusedMetricPoints, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
+		"otelcol_processor_memory_limiter_refused_metric_points",
 		metric.WithDescription("Number of metric points that were rejected by the next component in the pipeline. [deprecated since v0.110.0]"),
 		metric.WithUnit("{datapoints}"),
 	)
 	errs = errors.Join(errs, err)
-	builder.ProcessorRefusedSpans, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
-		"otelcol_processor_refused_spans",
+	builder.ProcessorMemoryLimiterRefusedSpans, err = builder.meters[configtelemetry.LevelBasic].Int64Counter(
+		"otelcol_processor_memory_limiter_refused_spans",
 		metric.WithDescription("Number of spans that were rejected by the next component in the pipeline. [deprecated since v0.110.0]"),
 		metric.WithUnit("{spans}"),
 	)
